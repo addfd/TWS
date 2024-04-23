@@ -1,4 +1,3 @@
-from handlers.admin import admin_features
 import csv
 
 
@@ -20,6 +19,5 @@ async def login(name, password, id, list):
         list[id] = name
         print(list)
         print([list[x] for x in list])
-        await admin_features
         return "Вы авторизовались"
     return "Неправильный логин или пароль"

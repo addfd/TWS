@@ -17,6 +17,7 @@ from database.orm_query import (
     orm_get_products,
     orm_update_product,
 )
+from handlers.admin import admin_features
 from kbds.inline import get_callback_btns
 from kbds.reply import get_keyboard
 from filters.password_manager import login
@@ -56,6 +57,9 @@ async def check(message: types.Message, state: FSMContext, bot: Bot):
     data = await state.get_data()
     re = await login(data["name"], data["password"], message.from_user.id, bot.my_admins_list)
     await message.answer(re)
+    if re == "Вы авторизовались":
+        await admin_features(message)
+
     await state.clear()
 # -----------------------------------------------------
 
@@ -63,7 +67,7 @@ async def check(message: types.Message, state: FSMContext, bot: Bot):
 @user_private_router.message(CommandStart())
 async def start_cmd(message: types.Message):
     await message.answer(
-        f"Привет {types.from_user.full_name}, я TWS",
+        f"Привет, я TWS",
         reply_markup=get_keyboard(
             "Меню",
             "О магазине",
