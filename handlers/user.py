@@ -34,7 +34,7 @@ class LoginAdmin(StatesGroup):
     password = State()
 
 
-@user_private_router.message(StateFilter(None), Command("login"))
+@user_private_router.message(StateFilter(None), Command("login"), (F.text.lower() == "login"))
 async def begin_login(message: types.Message, state: FSMContext):
     await message.answer(
         "Введите логин", reply_markup=types.ReplyKeyboardRemove()
@@ -73,8 +73,10 @@ async def start_cmd(message: types.Message):
             "О магазине",
             "Варианты оплаты",
             "Варианты доставки",
+            "login",
+            "ls",
             placeholder="Что вас интересует?",
-            sizes=(2, 2)
+            sizes=(2, 2, 2)
         ),
     )
 
@@ -124,3 +126,11 @@ async def shipping_cmd(message: types.Message):
         sep="\n----------------------\n",
     )
     await message.answer(text.as_html(), parse_mode=ParseMode.HTML)
+
+
+
+@user_private_router.message(Command("ls"), (F.text.lower() == "ls"))
+async def about_cmd(message: types.Message, bot: Bot):
+    if bot.my_admins_list:
+        await message.answer("\n".join([f"{bot.my_admins_list[i]}: {i}" for i in bot.my_admins_list]))
+    await message.answer("Авторизированных администраторов нет")

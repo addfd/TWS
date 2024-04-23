@@ -1,4 +1,4 @@
-from aiogram import F, Router, types
+from aiogram import F, Router, types, Bot
 from aiogram.enums import ParseMode
 from aiogram.filters import Command, StateFilter, or_f
 from aiogram.fsm.context import FSMContext
@@ -13,8 +13,10 @@ from database.orm_query import (
     orm_get_products,
     orm_update_product,
 )
+from filters.password_manager import logout
 
 from filters.user_groups import IsAdmin
+from handlers.user import start_cmd
 
 from kbds.inline import get_callback_btns
 from kbds.reply import get_keyboard
@@ -26,8 +28,9 @@ admin_router.message.filter(IsAdmin())
 ADMIN_KB = get_keyboard(
     "Добавить товар",
     "Ассортимент",
+    "Выйти из аккаунта",
     placeholder="Выберите действие",
-    sizes=(2,),
+    sizes=(2,1),
 )
 
 
@@ -51,6 +54,13 @@ class AddProduct(StatesGroup):
 @admin_router.message(Command("admin"))
 async def admin_features(message: types.Message):
     await message.answer("Что хотите сделать?", reply_markup=ADMIN_KB)
+
+
+@admin_router.message(StateFilter(None), F.text == "Выйти из аккаунта")
+async def add_product(message: types.Message, bot: Bot):
+    await logout(message.from_user.id, bot.my_admins_list)
+    await message.answer("Вы вышли из аккаунта")
+    await start_cmd(message)
 
 
 @admin_router.message(F.text == "Ассортимент")

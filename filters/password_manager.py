@@ -21,3 +21,7 @@ async def login(name, password, id, list):
         print([list[x] for x in list])
         return "Вы авторизовались"
     return "Неправильный логин или пароль"
+
+
+async def logout(id, list):
+    del list[id]
