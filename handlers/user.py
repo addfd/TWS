@@ -34,7 +34,7 @@ class LoginAdmin(StatesGroup):
     password = State()
 
 
-@user_private_router.message(StateFilter(None), Command("login"), (F.text.lower() == "login"))
+@user_private_router.message(StateFilter(None), or_f(Command("login"), (F.text.lower() == "login")))
 async def begin_login(message: types.Message, state: FSMContext):
     await message.answer(
         "Введите логин", reply_markup=types.ReplyKeyboardRemove()
@@ -44,7 +44,6 @@ async def begin_login(message: types.Message, state: FSMContext):
 
 @user_private_router.message(LoginAdmin.name, or_f(F.text, F.text == "."))
 async def password(message: types.Message, state: FSMContext):
-
     await state.update_data(name=message.text)
     await message.answer("Введите пароль")
     await state.set_state(LoginAdmin.password)
@@ -52,7 +51,6 @@ async def password(message: types.Message, state: FSMContext):
 
 @user_private_router.message(LoginAdmin.password, or_f(F.text, F.text == "."))
 async def check(message: types.Message, state: FSMContext, bot: Bot):
-
     await state.update_data(password=message.text)
     data = await state.get_data()
     re = await login(data["name"], data["password"], message.from_user.id, bot.my_admins_list)
@@ -61,6 +59,8 @@ async def check(message: types.Message, state: FSMContext, bot: Bot):
         await admin_features(message)
 
     await state.clear()
+
+
 # -----------------------------------------------------
 
 
@@ -128,9 +128,9 @@ async def shipping_cmd(message: types.Message):
     await message.answer(text.as_html(), parse_mode=ParseMode.HTML)
 
 
-
-@user_private_router.message(Command("ls"), (F.text.lower() == "ls"))
+@user_private_router.message(or_f(Command("ls"), (F.text.lower() == "ls")))
 async def about_cmd(message: types.Message, bot: Bot):
     if bot.my_admins_list:
         await message.answer("\n".join([f"{bot.my_admins_list[i]}: {i}" for i in bot.my_admins_list]))
-    await message.answer("Авторизированных администраторов нет")
+    else:
+        await message.answer("Авторизированных администраторов нет")

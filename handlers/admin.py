@@ -16,7 +16,6 @@ from database.orm_query import (
 from filters.password_manager import logout
 
 from filters.user_groups import IsAdmin
-from handlers.user import start_cmd
 
 from kbds.inline import get_callback_btns
 from kbds.reply import get_keyboard
@@ -59,8 +58,16 @@ async def admin_features(message: types.Message):
 @admin_router.message(StateFilter(None), F.text == "Выйти из аккаунта")
 async def add_product(message: types.Message, bot: Bot):
     await logout(message.from_user.id, bot.my_admins_list)
-    await message.answer("Вы вышли из аккаунта")
-    await start_cmd(message)
+    await message.answer("Вы вышли из аккаунта", reply_markup=get_keyboard(
+            "Меню",
+            "О магазине",
+            "Варианты оплаты",
+            "Варианты доставки",
+            "login",
+            "ls",
+            placeholder="Что вас интересует?",
+            sizes=(2, 2, 2)
+        ),)
 
 
 @admin_router.message(F.text == "Ассортимент")
