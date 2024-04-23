@@ -6,5 +6,6 @@ private = [
     BotCommand(command='about', description='О нас'),
     BotCommand(command='payment', description='Варианты оплаты'),
     BotCommand(command='shipping', description='Варианты доставки'),
-    BotCommand(command='login', description='ывлаооа')
+    BotCommand(command='login', description='Авторизоваться'),
+    BotCommand(command='ls', description='Список авторизованных администраторов')
 ]

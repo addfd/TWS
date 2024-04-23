@@ -11,11 +11,7 @@ from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from sqlalchemy.ext.asyncio import AsyncSession
 from database.orm_query import (
-    orm_add_product,
-    orm_delete_product,
-    orm_get_product,
     orm_get_products,
-    orm_update_product,
 )
 from handlers.admin import admin_features
 from kbds.inline import get_callback_btns
