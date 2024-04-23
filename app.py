@@ -6,19 +6,20 @@ from middlewares.db import DataBaseSession
 
 from database.engine import create_db, drop_db, session_maker
 
-from handlers.user_private import user_private_router
+from handlers.user import user_private_router
+from handlers.admin import admin_router
 
 from common.bot_cmds_list import private
 
 
-# ALLOWED_UPDATES = ['message', 'edited_message', 'callback_query']
 
 bot = Bot("6628638875:AAHWKt84Qu7wrPEEBcauEIh425jODdsUND8")  # БОТ
-bot.my_admins_list = []
+bot.my_admins_list = {}
 
 dp = Dispatcher()
 
 dp.include_router(user_private_router)
+dp.include_router(admin_router)
 
 async def on_startup():
 
