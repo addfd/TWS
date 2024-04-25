@@ -1,5 +1,5 @@
 from aiogram.enums import ParseMode
-from aiogram.filters import CommandStart, Command, or_f
+from aiogram.filters import CommandStart
 from aiogram.utils.formatting import (
     as_list,
     as_marked_section,
@@ -14,7 +14,6 @@ from database.orm_query import (
     orm_get_products,
 )
 from handlers.admin import admin_features
-from kbds.inline import get_callback_btns
 from kbds.reply import get_keyboard
 from filters.password_manager import login
 

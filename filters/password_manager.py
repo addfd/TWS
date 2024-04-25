@@ -1,7 +1,5 @@
 import csv
 
-
-
 pp = {}
 
 with open('filters/pp.csv', 'r') as csvfile:
@@ -23,5 +21,5 @@ async def login(name, password, id, list):
     return "Неправильный логин или пароль"
 
 
-async def logout(id, list):
-    del list[id]
+async def logout(iduser, listuser):
+    del listuser[iduser]
